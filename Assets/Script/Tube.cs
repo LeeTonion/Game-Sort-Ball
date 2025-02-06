@@ -12,7 +12,7 @@ public class Tube : MonoBehaviour, IPointerDownHandler
     public GameObject listBallGO;
     
     public List<GameObject> balls = new List<GameObject>();
-    public Vector3 pointStartMove => listPosGO.transform.GetChild(4).transform.position + new Vector3(0, 1.2f, 0);
+    public Vector3 pointStartMove => listPosGO.transform.GetChild(4).transform.position + new Vector3(0, 2f, 0);
     public bool isFullTube => balls[4] != null;
 
     public bool isTubeNull => balls[0] == null;
@@ -68,7 +68,7 @@ public class Tube : MonoBehaviour, IPointerDownHandler
         else
         {
             GameObject currentBall = GameManager.instance.currentTube.GetBall();
-            if (GameManager.instance.currentTube == this || this.isFullTube )
+            if (GameManager.instance.currentTube == this || this.isFullTube || (!this.isTubeNull && currentBall.GetComponent<Image>().sprite != this.GetBall().GetComponent<Image>().sprite))
             {
                if (GameManager.instance.canmove)
                     GameManager.instance.canmove = false;

@@ -13,7 +13,8 @@ public class RowTube
 public class LevelData : ScriptableObject
 {
     public List<RowTube> level = new List<RowTube>();
-    
+    public bool Complete = false;
+    public bool Unlock = false;
     public void CreateLevel()
     {
         for (int i = 0; i < level.Count; i++)

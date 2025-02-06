@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,6 +20,8 @@ public class GameManager : MonoBehaviour
     public GameObject NextLever;
     public bool canmove = false;
     public GameObject prefabListTube, listRowGO;
+    [SerializeField] private GameObject menuGamePlay;
+    [SerializeField] private GameObject menu;
     private void Awake()
     {
         if (instance == null)
@@ -29,18 +32,19 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        DontDestroyOnLoad(gameObject);
     }
-    void Start()
+    public void StartLevelGame(int Value)
     {
-        levelGame[numlever].CreateLevel();
+        numlever = Value;
+        levelGame[Value].CreateLevel();
+        menuGamePlay.GetComponentInChildren<TextMeshProUGUI>().text = "LEVEL " + (Value+1);
+        menuGamePlay.SetActive(true);
     }
 
-    void Update()
-    {
 
-    }
-
-   public bool IsWin()
+    public bool IsWin()
     {
         for (int i = 0; i < tubes.Count; i++)
         {
@@ -50,7 +54,6 @@ public class GameManager : MonoBehaviour
             }
             if (!tubes[i].isFullTube)
             {
-
                 return false;
             }
             else
@@ -67,22 +70,38 @@ public class GameManager : MonoBehaviour
         }
         Win();
         return true;
-
     }
     private void Win()
+    {
+        
+        NextLever.SetActive(true);    
+        levelGame[numlever].Complete = true;
+        Clean();
+    }
+    public void Nextlever()
     {   
+        
+        NextLever.SetActive(false);
+        numlever++;
+        StartLevelGame(numlever);
+        levelGame[numlever].Unlock = true;
 
-        foreach(Transform child in listRowGO.transform)
+    }
+    public void Clean()
+    {
+        foreach (Transform child in listRowGO.transform)
         {
             GameObject.Destroy(child.gameObject);
         }
+        
         tubes.Clear();
-        NextLever.SetActive(true);
+        menuGamePlay.SetActive(false);
     }
-    public void Nextlever()
+
+    public void ButtonHome()
     {
-        NextLever.SetActive(false);
-        numlever++;
-        levelGame[numlever].CreateLevel();
+        Clean();
+        menuGamePlay.SetActive(false );
+        menu.SetActive(true);
     }
 }
